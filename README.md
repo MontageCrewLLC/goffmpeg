@@ -1,5 +1,5 @@
 ﻿# Goffmpeg
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/93e018e5008b4439acbb30d715b22e7f)](https://www.codacy.com/app/francisco.romero/goffmpeg?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xfrr/goffmpeg&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/93e018e5008b4439acbb30d715b22e7f)](https://www.codacy.com/app/francisco.romero/goffmpeg?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=montagemp/goffmpeg&amp;utm_campaign=Badge_Grade)
 
 FFMPEG wrapper written in GO which allows to obtain the progress.
 
@@ -16,14 +16,14 @@ FFMPEG wrapper written in GO which allows to obtain the progress.
 # Getting started
 How to transcode a media file
 ```shell
-go get github.com/xfrr/goffmpeg
+go get github.com/montagemp/goffmpeg
 ```
 
 ```go
 package main
 
 import (
-    "github.com/xfrr/goffmpeg/transcoder"
+    "github.com/montagemp/goffmpeg/transcoder"
 )
 
 var inputPath = "/data/testmov"

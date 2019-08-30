@@ -12,9 +12,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/xfrr/goffmpeg/ffmpeg"
-	"github.com/xfrr/goffmpeg/models"
-	"github.com/xfrr/goffmpeg/utils"
+	"github.com/montagemp/goffmpeg/ffmpeg"
+	"github.com/montagemp/goffmpeg/models"
+	"github.com/montagemp/goffmpeg/utils"
 )
 
 // Transcoder Main struct
@@ -79,9 +79,11 @@ func (t Transcoder) GetCommand() []string {
 }
 
 // Initialize Init the transcoding process
-func (t *Transcoder) Initialize(inputPath string, outputPath string) error {
+func (t *Transcoder) Initialize(inputPath string, outputPath string, env string) error {
 	var err error
+	var err2 error
 	var out bytes.Buffer
+	var out2 bytes.Buffer
 	var Metadata models.Metadata
 
 	cfg := t.configuration
@@ -98,19 +100,34 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string) error {
 	}
 
 	command := []string{"-i", inputPath, "-print_format", "json", "-show_format", "-show_streams", "-show_error"}
-
 	cmd := exec.Command(cfg.FfprobeBin, command...)
 	cmd.Stdout = &out
-
+	
 	err = cmd.Run()
 	if err != nil {
 		return fmt.Errorf("error executing (%s) | error: %s", command, err)
 	}
-
+	
 	if err = json.Unmarshal([]byte(out.String()), &Metadata); err != nil {
 		return err
 	}
 
+	var atTime = "15"
+	if env == "live" {
+		atTime = "360" 
+	}
+
+	outputFolder := outputPath[:strings.LastIndexByte(outputPath, '/')]
+	actionOutput := outputFolder + "/action-shot.jpg"
+	actionShotCommand := []string{"-ss", atTime, "-i", inputPath, "-qscale:v", "4", "-frames:v", "1", actionOutput}
+	cmd2 := exec.Command(cfg.FfmpegBin, actionShotCommand...)
+	cmd2.Stdout = &out2
+	
+	err2 = cmd2.Start()
+	if err2 != nil {
+		return fmt.Errorf("error executing (%s) | error: %s", actionShotCommand, err2)
+	}
+	
 	// Set new Mediafile
 	MediaFile := new(models.Mediafile)
 	MediaFile.SetMetadata(Metadata)
