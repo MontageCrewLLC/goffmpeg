@@ -119,13 +119,16 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string, env string)
 
 	outputFolder := outputPath[:strings.LastIndexByte(outputPath, '/')]
 	actionOutput := outputFolder + "/action-shot.jpg"
-	actionShotCommand := []string{"-ss", atTime, "-i", inputPath, "-qscale:v", "4", "-frames:v", "1", actionOutput}
-	cmd2 := exec.Command(cfg.FfmpegBin, actionShotCommand...)
-	cmd2.Stdout = &out2
-	
-	err2 = cmd2.Start()
-	if err2 != nil {
-		return fmt.Errorf("error executing (%s) | error: %s", actionShotCommand, err2)
+
+	if !fileExists(actionOutput) {
+		actionShotCommand := []string{"-ss", atTime, "-i", inputPath, "-qscale:v", "4", "-frames:v", "1", actionOutput}
+		cmd2 := exec.Command(cfg.FfmpegBin, actionShotCommand...)
+		cmd2.Stdout = &out2
+		
+		err2 = cmd2.Start()
+		if err2 != nil {
+			return fmt.Errorf("error executing (%s) | error: %s", actionShotCommand, err2)
+		}
 	}
 	
 	// Set new Mediafile
@@ -299,4 +302,12 @@ func (t Transcoder) Output() <-chan models.Progress {
 	}()
 
 	return out
+}
+
+func fileExists(filename string) bool {
+    info, err := os.Stat(filename)
+    if os.IsNotExist(err) {
+        return false
+    }
+    return !info.IsDir()
 }
