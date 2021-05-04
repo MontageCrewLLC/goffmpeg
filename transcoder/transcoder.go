@@ -13,9 +13,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/montagemp/goffmpeg/ffmpeg"
-	"github.com/montagemp/goffmpeg/models"
-	"github.com/montagemp/goffmpeg/utils"
+	"github.com/MontageCrewLLC/goffmpeg/ffmpeg"
+	"github.com/MontageCrewLLC/goffmpeg/models"
+	"github.com/MontageCrewLLC/goffmpeg/utils"
 )
 
 // Transcoder Main struct
