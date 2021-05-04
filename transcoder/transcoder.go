@@ -114,8 +114,8 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string, env string)
 	}
 
 	var atTime = "15"
-	if env == "live" {
-		atTime = "360" 
+	if env == "alpha" || env == "live" {
+		atTime = "52"
 	}
 
 	actionOutput := outputPath + "/action-shot.jpg"
