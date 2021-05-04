@@ -23,7 +23,7 @@ go get github.com/MontageCrewLLC/goffmpeg
 package main
 
 import (
-    "github.com/montagemp/MontageCrewLLC/transcoder"
+    "github.com/MontageCrewLLC/goffmpeg/transcoder"
 )
 
 var inputPath = "/data/testmov"
