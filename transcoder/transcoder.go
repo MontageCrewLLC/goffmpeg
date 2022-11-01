@@ -118,7 +118,7 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string, env string)
 		atTime = "52"
 	}
 
-	actionOutput := outputPath + "/action-shot.jpg"
+	actionOutput := outputPath + "/action-shot.png"
 	if !fileExists(actionOutput) {
 		actionShotCommand := []string{"-ss", atTime, "-i", inputPath, "-qscale:v", "4", "-frames:v", "1", actionOutput}
 		cmd2 := exec.Command(cfg.FfmpegBin, actionShotCommand...)
