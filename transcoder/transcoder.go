@@ -80,7 +80,7 @@ func (t Transcoder) GetCommand() []string {
 }
 
 // Initialize Init the transcoding process
-func (t *Transcoder) Initialize() error {
+func (t *Transcoder) Initialize(inputPath string, outputPath string) error {
 	var err error
 	var err2 error
 	var out bytes.Buffer
