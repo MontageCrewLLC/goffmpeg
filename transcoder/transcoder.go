@@ -125,7 +125,7 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string) error {
 
 }
 
-func (t *Transcoder) TakeActionShot(duration string, inputPath string, outputPath string, env string) {
+func (t *Transcoder) TakeActionShot(duration string, inputPath string, outputPath string, env string) error {
 	cfg := t.configuration
 	
 	var out bytes.Buffer
@@ -151,6 +151,8 @@ func (t *Transcoder) TakeActionShot(duration string, inputPath string, outputPat
 			return fmt.Errorf("error executing (%s) | error: %s", actionShotCommand, err)
 		}
 	}
+	
+	return nil
 }
 
 // Run Starts the transcoding process
