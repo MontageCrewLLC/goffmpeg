@@ -113,13 +113,24 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string, env string)
 		return err
 	}
 
+	// Set new Mediafile
+	MediaFile := new(models.Mediafile)
+	MediaFile.SetMetadata(Metadata)
+	MediaFile.SetInputPath(inputPath)
+	MediaFile.SetOutputPath(outputPath)
+
+	// Set transcoder configuration
+	var mfile = t.SetMediaFile(MediaFile)
+	t.SetConfiguration(cfg)
+	
+	// =========== action shot ===========
 	var atTime = "15"
 	if env == "alpha" || env == "live" {
 		atTime = "52"
 	}
 	
 	var atTimeFloat, errAtTime = strconv.ParseFloat(atTime, 8)
-	var durationFloat, errDuration = strconv.ParseFloat(t.mediafile.duration, 8)
+	var durationFloat, errDuration = strconv.ParseFloat(mfile.duration, 8)
 	if atTimeFloat > durationFloat {
 		atTime = "0"
 	}
@@ -135,16 +146,7 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string, env string)
 			return fmt.Errorf("error executing (%s) | error: %s", actionShotCommand, err2)
 		}
 	}
-	
-	// Set new Mediafile
-	MediaFile := new(models.Mediafile)
-	MediaFile.SetMetadata(Metadata)
-	MediaFile.SetInputPath(inputPath)
-	MediaFile.SetOutputPath(outputPath)
-
-	// Set transcoder configuration
-	t.SetMediaFile(MediaFile)
-	t.SetConfiguration(cfg)
+	// ========== end action shot ============
 
 	return nil
 
