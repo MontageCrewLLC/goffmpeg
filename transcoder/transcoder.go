@@ -136,6 +136,14 @@ func (t *Transcoder) TakeActionShot(duration string, inputPath string, outputPat
 	
 	var atTimeFloat, errAtTime = strconv.ParseFloat(atTime, 8)
 	var durationFloat, errDuration = strconv.ParseFloat(duration, 8)
+	if errAtTime != nil {
+		return fmt.Errorf("error converting atTime | error: %s", errAtTime)
+	}
+	
+	if errDuration != nil {
+		return fmt.Errorf("error converting duration | error: %s", errDuration)
+	}
+	
 	if atTimeFloat > durationFloat {
 		atTime = "0"
 	}
