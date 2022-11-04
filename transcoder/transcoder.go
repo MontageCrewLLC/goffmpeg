@@ -80,9 +80,11 @@ func (t Transcoder) GetCommand() []string {
 }
 
 // Initialize Init the transcoding process
-func (t *Transcoder) Initialize(inputPath string, outputPath string) error {
+func (t *Transcoder) Initialize(inputPath string, outputPath string, env string) error {
 	var err error
+	var err2 error
 	var out bytes.Buffer
+	var out2 bytes.Buffer
 	var Metadata models.Metadata
 
 	cfg := t.configuration
@@ -111,6 +113,23 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string) error {
 		return err
 	}
 
+	var atTime = "15"
+	if env == "alpha" || env == "live" {
+		atTime = "52"
+	}
+
+	actionOutput := outputPath + "/action-shot.png"
+	if !fileExists(actionOutput) {
+		actionShotCommand := []string{"-ss", atTime, "-i", inputPath, "-qscale:v", "4", "-frames:v", "1", actionOutput}
+		cmd2 := exec.Command(cfg.FfmpegBin, actionShotCommand...)
+		cmd2.Stdout = &out2
+		
+		err2 = cmd2.Start()
+		if err2 != nil {
+			return fmt.Errorf("error executing (%s) | error: %s", actionShotCommand, err2)
+		}
+	}
+	
 	// Set new Mediafile
 	MediaFile := new(models.Mediafile)
 	MediaFile.SetMetadata(Metadata)
@@ -123,44 +142,6 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string) error {
 
 	return nil
 
-}
-
-func (t *Transcoder) TakeActionShot(duration string, inputPath string, outputPath string, env string) error {
-	cfg := t.configuration
-	
-	var out bytes.Buffer
-	var atTime = "15"
-	if env == "alpha" || env == "live" {
-		atTime = "52"
-	}
-	
-	var atTimeFloat, errAtTime = strconv.ParseFloat(atTime, 8)
-	var durationFloat, errDuration = strconv.ParseFloat(duration, 8)
-	if errAtTime != nil {
-		return fmt.Errorf("error converting atTime | error: %s", errAtTime)
-	}
-	
-	if errDuration != nil {
-		return fmt.Errorf("error converting duration | error: %s", errDuration)
-	}
-	
-	if atTimeFloat > durationFloat {
-		atTime = "0"
-	}
-
-	actionOutput := outputPath + "/action-shot.png"
-	if !fileExists(actionOutput) {
-		actionShotCommand := []string{"-ss", atTime, "-i", inputPath, "-qscale:v", "4", "-frames:v", "1", actionOutput}
-		cmd := exec.Command(cfg.FfmpegBin, actionShotCommand...)
-		cmd.Stdout = &out
-		
-		err := cmd.Run()
-		if err != nil {
-			return fmt.Errorf("error executing (%s) | error: %s", actionShotCommand, err)
-		}
-	}
-	
-	return nil
 }
 
 // Run Starts the transcoding process
