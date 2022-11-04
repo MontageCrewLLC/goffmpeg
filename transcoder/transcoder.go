@@ -82,7 +82,6 @@ func (t Transcoder) GetCommand() []string {
 // Initialize Init the transcoding process
 func (t *Transcoder) Initialize(inputPath string, outputPath string) error {
 	var err error
-	var err2 error
 	var out bytes.Buffer
 	var Metadata models.Metadata
 
@@ -127,6 +126,8 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string) error {
 }
 
 func (t *Transcoder) TakeActionShot(duration string, inputPath string, outputPath string, env string) {
+	cfg := t.configuration
+	
 	var out bytes.Buffer
 	var atTime = "15"
 	if env == "alpha" || env == "live" {
@@ -145,7 +146,7 @@ func (t *Transcoder) TakeActionShot(duration string, inputPath string, outputPat
 		cmd := exec.Command(cfg.FfmpegBin, actionShotCommand...)
 		cmd.Stdout = &out
 		
-		err = cmd.Start()
+		err: = cmd.Start()
 		if err != nil {
 			return fmt.Errorf("error executing (%s) | error: %s", actionShotCommand, err)
 		}
