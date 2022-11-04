@@ -117,6 +117,10 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string, env string)
 	if env == "alpha" || env == "live" {
 		atTime = "52"
 	}
+	
+	if atTime > models.Mediafile.duration {
+		atTime = "0"
+	}
 
 	actionOutput := outputPath + "/action-shot.png"
 	if !fileExists(actionOutput) {
