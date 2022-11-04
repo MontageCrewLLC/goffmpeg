@@ -84,7 +84,6 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string, env string)
 	var err error
 	var err2 error
 	var out bytes.Buffer
-	var out2 bytes.Buffer
 	var Metadata models.Metadata
 
 	cfg := t.configuration
@@ -120,17 +119,22 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string, env string)
 	MediaFile.SetOutputPath(outputPath)
 
 	// Set transcoder configuration
-	var mfile = t.SetMediaFile(MediaFile)
+	t.SetMediaFile(MediaFile)
 	t.SetConfiguration(cfg)
-	
-	// =========== action shot ===========
+
+	return nil
+
+}
+
+func (t *Transcoder) TakeActionShot(duration string, inputPath string, outputPath string, env string) {
+	var out bytes.Buffer
 	var atTime = "15"
 	if env == "alpha" || env == "live" {
 		atTime = "52"
 	}
 	
 	var atTimeFloat, errAtTime = strconv.ParseFloat(atTime, 8)
-	var durationFloat, errDuration = strconv.ParseFloat(mfile.duration, 8)
+	var durationFloat, errDuration = strconv.ParseFloat(duration, 8)
 	if atTimeFloat > durationFloat {
 		atTime = "0"
 	}
@@ -138,18 +142,14 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string, env string)
 	actionOutput := outputPath + "/action-shot.png"
 	if !fileExists(actionOutput) {
 		actionShotCommand := []string{"-ss", atTime, "-i", inputPath, "-qscale:v", "4", "-frames:v", "1", actionOutput}
-		cmd2 := exec.Command(cfg.FfmpegBin, actionShotCommand...)
-		cmd2.Stdout = &out2
+		cmd := exec.Command(cfg.FfmpegBin, actionShotCommand...)
+		cmd.Stdout = &out
 		
-		err2 = cmd2.Start()
-		if err2 != nil {
-			return fmt.Errorf("error executing (%s) | error: %s", actionShotCommand, err2)
+		err = cmd.Start()
+		if err != nil {
+			return fmt.Errorf("error executing (%s) | error: %s", actionShotCommand, err)
 		}
 	}
-	// ========== end action shot ============
-
-	return nil
-
 }
 
 // Run Starts the transcoding process
