@@ -154,7 +154,7 @@ func (t *Transcoder) TakeActionShot(duration string, inputPath string, outputPat
 		cmd := exec.Command(cfg.FfmpegBin, actionShotCommand...)
 		cmd.Stdout = &out
 		
-		err := cmd.Start()
+		err := cmd.Run()
 		if err != nil {
 			return fmt.Errorf("error executing (%s) | error: %s", actionShotCommand, err)
 		}
