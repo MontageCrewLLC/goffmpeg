@@ -118,7 +118,9 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string, env string)
 		atTime = "52"
 	}
 	
-	if atTime > models.Mediafile.duration {
+	var atTimeFloat = strconv.ParseFloat(atTime, 8)
+	var durationFloat = strconv.ParseFloat(models.Mediafile.duration, 8)
+	if atTimeFloat > durationFloat {
 		atTime = "0"
 	}
 
