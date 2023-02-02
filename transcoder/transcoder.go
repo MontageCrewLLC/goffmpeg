@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"os"
 	"os/exec"
 	"regexp"
 	"strconv"
@@ -156,9 +157,11 @@ func (t *Transcoder) CreateOutputPipe(containerFormat string) (*io.PipeReader, e
 }
 
 // Initialize Init the transcoding process
-func (t *Transcoder) Initialize(inputPath string, outputPath string) error {
+func (t *Transcoder) Initialize(inputPath string, outputPath string, env string) error {
 	var err error
+	var err2 error
 	var outb, errb bytes.Buffer
+	var outb2, errb2 bytes.Buffer
 	var Metadata models.Metadata
 
 	cfg := t.configuration
@@ -191,6 +194,24 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string) error {
 
 	if err = json.Unmarshal([]byte(outb.String()), &Metadata); err != nil {
 		return err
+	}
+
+	var atTime = "15"
+	if env == "alpha" || env == "live" {
+		atTime = "52"
+	}
+
+	actionOutput := outputPath + "/action-shot.png"
+	if !fileExists(actionOutput) {
+		actionShotCommand := []string{"-ss", atTime, "-i", inputPath, "-qscale:v", "4", "-frames:v", "1", actionOutput}
+		cmd2 := exec.Command(cfg.FfmpegBin, actionShotCommand...)
+		cmd2.Stdout = &outb2
+		cmd2.Stderr = &errb2
+		
+		err2 = cmd2.Start()
+		if err2 != nil {
+			return fmt.Errorf("error executing (%s) | error: %s", actionShotCommand, errb2.String())
+		}
 	}
 
 	// Set new Mediafile
@@ -392,4 +413,12 @@ func (t *Transcoder) closePipes() {
 	if t.mediafile.OutputPipe() {
 		t.mediafile.OutputPipeWriter().Close()
 	}
+}
+
+func fileExists(filename string) bool {
+	info, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+			return false
+	}
+	return !info.IsDir()
 }
