@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/xfrr/goffmpeg/transcoder"
+	"github.com/MontageCrewLLC/goffmpeg/transcoder"
 )
 
 func TestInputNotFound(t *testing.T) {
@@ -18,7 +18,7 @@ func TestInputNotFound(t *testing.T) {
 
 	trans := new(transcoder.Transcoder)
 
-	err := trans.Initialize(inputPath, outputPath)
+	err := trans.Initialize(inputPath, outputPath, "alpha")
 	assert.NotNil(t, err)
 }
 
@@ -29,7 +29,7 @@ func TestTranscoding3GP(t *testing.T) {
 
 	trans := new(transcoder.Transcoder)
 
-	err := trans.Initialize(inputPath, outputPath)
+	err := trans.Initialize(inputPath, outputPath, "alpha")
 	assert.Nil(t, err)
 
 	done := trans.Run(false)
@@ -44,7 +44,7 @@ func TestTranscodingAVI(t *testing.T) {
 
 	trans := new(transcoder.Transcoder)
 
-	err := trans.Initialize(inputPath, outputPath)
+	err := trans.Initialize(inputPath, outputPath, "alpha")
 	assert.Nil(t, err)
 
 	done := trans.Run(false)
@@ -59,7 +59,7 @@ func TestTranscodingFLV(t *testing.T) {
 
 	trans := new(transcoder.Transcoder)
 
-	err := trans.Initialize(inputPath, outputPath)
+	err := trans.Initialize(inputPath, outputPath, "alpha")
 	assert.Nil(t, err)
 
 	done := trans.Run(false)
@@ -74,7 +74,7 @@ func TestTranscodingMKV(t *testing.T) {
 
 	trans := new(transcoder.Transcoder)
 
-	err := trans.Initialize(inputPath, outputPath)
+	err := trans.Initialize(inputPath, outputPath, "alpha")
 	assert.Nil(t, err)
 
 	done := trans.Run(false)
@@ -89,7 +89,7 @@ func TestTranscodingMOV(t *testing.T) {
 
 	trans := new(transcoder.Transcoder)
 
-	err := trans.Initialize(inputPath, outputPath)
+	err := trans.Initialize(inputPath, outputPath, "alpha")
 	assert.Nil(t, err)
 
 	done := trans.Run(false)
@@ -104,7 +104,7 @@ func TestTranscodingMPEG(t *testing.T) {
 
 	trans := new(transcoder.Transcoder)
 
-	err := trans.Initialize(inputPath, outputPath)
+	err := trans.Initialize(inputPath, outputPath, "alpha")
 	assert.Nil(t, err)
 
 	done := trans.Run(false)
@@ -119,7 +119,7 @@ func TestTranscodingOGG(t *testing.T) {
 
 	trans := new(transcoder.Transcoder)
 
-	err := trans.Initialize(inputPath, outputPath)
+	err := trans.Initialize(inputPath, outputPath, "alpha")
 	assert.Nil(t, err)
 
 	done := trans.Run(false)
@@ -134,7 +134,7 @@ func TestTranscodingWAV(t *testing.T) {
 
 	trans := new(transcoder.Transcoder)
 
-	err := trans.Initialize(inputPath, outputPath)
+	err := trans.Initialize(inputPath, outputPath, "alpha")
 	assert.Nil(t, err)
 
 	done := trans.Run(false)
@@ -149,7 +149,7 @@ func TestTranscodingWEBM(t *testing.T) {
 
 	trans := new(transcoder.Transcoder)
 
-	err := trans.Initialize(inputPath, outputPath)
+	err := trans.Initialize(inputPath, outputPath, "alpha")
 	assert.Nil(t, err)
 
 	done := trans.Run(false)
@@ -164,7 +164,7 @@ func TestTranscodingWMV(t *testing.T) {
 
 	trans := new(transcoder.Transcoder)
 
-	err := trans.Initialize(inputPath, outputPath)
+	err := trans.Initialize(inputPath, outputPath, "alpha")
 	assert.Nil(t, err)
 
 	done := trans.Run(false)
@@ -179,7 +179,7 @@ func TestTranscodingProgress(t *testing.T) {
 
 	trans := new(transcoder.Transcoder)
 
-	err := trans.Initialize(inputPath, outputPath)
+	err := trans.Initialize(inputPath, outputPath, "alpha")
 	assert.Nil(t, err)
 
 	done := trans.Run(true)
