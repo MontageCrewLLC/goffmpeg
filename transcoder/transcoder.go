@@ -197,7 +197,7 @@ func (t *Transcoder) Initialize(inputPath string, outputPath string, env string)
 	}
 
 	var atTime = "15"
-	if env == "alpha" || env == "live" {
+	if env == "live" {
 		atTime = "52"
 	}
 
